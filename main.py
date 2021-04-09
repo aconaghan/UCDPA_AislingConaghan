@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 #importing dataset
 df = pd.read_csv(r'Property_Price_Register_Ireland-05-04-2019.csv')
@@ -87,10 +88,21 @@ print(df2.shape)
 print(df2.columns)
 
 #grouped summary statistics
-#avg_price = df2.groupby(['Region', 'Description of Property'])['Price (€)'].mean()
+avg_price_per_county = df2.groupby('County')['Price (€)'].mean().sort_values(ascending=False)
+print(avg_price_per_county)
 
+def pivot_to_csv(data, values, index, aggfunc, output_file):
 
+    # Create pivot table of summary statistics
+    table = data.pivot_table(values=values, index=index, aggfunc=aggfunc)
 
+    # Write the new DataFrame to a csv file
+    filename = str(output_file) + '.csv'
+    table.to_csv(filename)
+
+pivot_to_csv(df2, 'Price (€)',  ['Region','County'], [np.mean, np.median, np.min, np.max], 'SummStats_Region_County')
+
+pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean, 'Avg_Price_Region_TypeProperty')
 
 
 
