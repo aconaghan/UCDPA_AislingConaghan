@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 #importing dataset
 df = pd.read_csv(r'Property_Price_Register_Ireland-05-04-2019.csv')
@@ -104,7 +105,11 @@ pivot_to_csv(df2, 'Price (€)',  ['Region','County'], [np.mean, np.median, np.m
 
 pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean, 'Avg_Price_Region_TypeProperty')
 
+#bar plot of average price by region and property type
+price_by_region_type = df2.groupby(['Region', 'Description of Property'])['Price (€)'].mean().reset_index()
+print(price_by_region_type)
 
+fig, ax = plt.subplots()
 
 
 
