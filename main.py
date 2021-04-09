@@ -23,7 +23,38 @@ df_no_dup = df.drop_duplicates(subset = col_list)
 print(df_no_dup.shape)
 
 #checking for missing values
-#print(df.isnull().sum())
+print(df_no_dup.isnull().sum())
+df_no_dup = df_no_dup.fillna(0)
+
+#dictionary for mapping county to region
+map_region = { 'Cavan':'Border',
+               'Donegal':'Border',
+               'Leitrim':'Border',
+               'Monaghan':'Border',
+               'Sligo':'Border',
+               'Dublin':'Dublin',
+               'Kildare':'Mid-East',
+               'Louth':'Mid-East',
+               'Meath':'Mid-East',
+               'Wicklow':'Mid-East',
+               'Laois':'Midland',
+               'Longford':'Midland',
+               'Offaly':'Midland',
+               'Westmeath':'Midland',
+               'Clare':'Mid-West',
+               'Limerick':'Mid-West',
+               'Tipperary':'Mid-West',
+               'Carlow':'South-East',
+               'Kilkenny':'South-East',
+               'Waterford':'South-East',
+               'Wexford':'South-East',
+               'Cork':'South-West',
+               'Kerry':'South-West',
+               'Galway':'West',
+               'Mayo':'West',
+               'Roscommon':'West' }
+
+
 
 
 
