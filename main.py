@@ -108,13 +108,35 @@ pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean,
 
 #bar plot of average price by region and property type
 price_by_region_type = df2.groupby(['Region', 'Description of Property'])['Price (€)'].mean().reset_index()
+price_by_region_type = price_by_region_type.sort_values('Price (€)', ascending=False)
 print(price_by_region_type)
+new = price_by_region_type[price_by_region_type['Description of Property'] == 'New Dwelling house /Apartment'].reset_index()
+second_hand = price_by_region_type[price_by_region_type['Description of Property'] == 'Second-Hand Dwelling house /Apartment'].reset_index()
+region_list = price_by_region_type['Region'].unique()
+print(region_list)
+
+x = np.arange(len(region_list))  # the label locations
+width = 0.35  # the width of the bars
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, new['Price (€)'], width, label='New House/Apartment')
+rects2 = ax.bar(x + width/2, second_hand['Price (€)'], width, label='Second-Hand House/Apartment')
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Average Price (€)')
+ax.set_xlabel('Region')
+ax.set_title('Average Price by House Type in Ireland')
+ax.set_xticks(x)
+ax.set_xticklabels(region_list, rotation=45)
+ax.legend()
+
+fig.tight_layout()
+
+plt.show()
 
 #time series graph of average price by region
 avg_price_by_year = df2.groupby(['Region','Year'])['Price (€)'].mean().reset_index()
 df3 = avg_price_by_year.set_index('Year')
-region_list = avg_price_by_year['Region'].unique()
-print(region_list)
 
 border = df3[df3['Region'] == "Border"]
 dublin = df3[df3['Region'] == "Dublin"]
@@ -133,6 +155,7 @@ def plot_timeseries(axes, x, y, marker, color, label, xlabel, ylabel):
     axes.legend(loc=2, prop={'size': 7})
 
 fig, ax = plt.subplots()
+
 plot_timeseries(ax, dublin.index, dublin['Price (€)'], "o", "tab:blue", "Dublin", "Year", "Average House Price (€)")
 plot_timeseries(ax, border.index, border['Price (€)'], "o", "tab:orange", "Border", "Year", "Average House Price (€)")
 plot_timeseries(ax, me.index, me['Price (€)'], "o", "tab:green", "Mid-East", "Year", "Average House Price (€)")
@@ -141,8 +164,12 @@ plot_timeseries(ax, se.index, se['Price (€)'], "o", "tab:purple", "South-East"
 plot_timeseries(ax, sw.index, sw['Price (€)'], "o", "tab:pink", "South-West", "Year", "Average House Price (€)")
 plot_timeseries(ax, midland.index, midland['Price (€)'], "o", "tab:cyan", "Midland", "Year", "Average House Price (€)")
 plot_timeseries(ax, west.index, west['Price (€)'], "o", "tab:olive", "West", "Year", "Average House Price (€)")
-ax.set_title("Average House Price Over Time By Region")
+
+ax.set_title("Average House Price by Region from 2010-2019")
+plt.xticks(range(2010, 2020))
+
 plt.tight_layout()
+
 plt.show()
 
 
