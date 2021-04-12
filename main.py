@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 #importing dataset
 df = pd.read_csv(r'Property_Price_Register_Ireland-05-04-2019.csv')
@@ -109,7 +110,43 @@ pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean,
 price_by_region_type = df2.groupby(['Region', 'Description of Property'])['Price (€)'].mean().reset_index()
 print(price_by_region_type)
 
+#time series graph of average price by region
+avg_price_by_year = df2.groupby(['Region','Year'])['Price (€)'].mean().reset_index()
+df3 = avg_price_by_year.set_index('Year')
+region_list = avg_price_by_year['Region'].unique()
+print(region_list)
+
+border = df3[df3['Region'] == "Border"]
+dublin = df3[df3['Region'] == "Dublin"]
+me = df3[df3['Region'] == "Mid-East"]
+west = df3[df3['Region'] == "West"]
+mw = df3[df3['Region'] == "Mid-West"]
+midland = df3[df3['Region'] == "Midland"]
+se = df3[df3['Region'] == "South-East"]
+sw = df3[df3['Region'] == "South-West"]
+
+def plot_timeseries(axes, x, y, marker, color, label, xlabel, ylabel):
+
+    axes.plot(x,y, marker=marker, color=color, label=label)
+    axes.set_xlabel(xlabel)
+    axes.set_ylabel(ylabel)
+    axes.legend(loc=2, prop={'size': 7})
+
 fig, ax = plt.subplots()
+plot_timeseries(ax, dublin.index, dublin['Price (€)'], "o", "tab:blue", "Dublin", "Year", "Average House Price (€)")
+plot_timeseries(ax, border.index, border['Price (€)'], "o", "tab:orange", "Border", "Year", "Average House Price (€)")
+plot_timeseries(ax, me.index, me['Price (€)'], "o", "tab:green", "Mid-East", "Year", "Average House Price (€)")
+plot_timeseries(ax, mw.index, mw['Price (€)'], "o", "tab:red", "Mid-West", "Year", "Average House Price (€)")
+plot_timeseries(ax, se.index, se['Price (€)'], "o", "tab:purple", "South-East", "Year", "Average House Price (€)")
+plot_timeseries(ax, sw.index, sw['Price (€)'], "o", "tab:pink", "South-West", "Year", "Average House Price (€)")
+plot_timeseries(ax, midland.index, midland['Price (€)'], "o", "tab:cyan", "Midland", "Year", "Average House Price (€)")
+plot_timeseries(ax, west.index, west['Price (€)'], "o", "tab:olive", "West", "Year", "Average House Price (€)")
+ax.set_title("Average House Price Over Time By Region")
+plt.tight_layout()
+plt.show()
+
+
+
 
 
 
