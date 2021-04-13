@@ -132,7 +132,7 @@ ax.legend()
 
 fig.tight_layout()
 
-#plt.show()
+plt.show()
 
 #time series graph of average price by region
 avg_price_by_year = df2.groupby(['Region','Year'])['Price (€)'].mean().reset_index()
@@ -170,7 +170,7 @@ plt.xticks(range(2010, 2020))
 
 plt.tight_layout()
 
-#plt.show()
+plt.show()
 
 #histogram showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
