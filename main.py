@@ -203,9 +203,10 @@ maxsize = max(avg_income_house_price['Population (000s)'])
 g = sns.relplot(x='Average Income per Person (€)', y='Average House Price (€)', data=avg_income_house_price, kind='scatter',
             size='Population (000s)', sizes=(minsize, maxsize), hue='Population (000s)', palette=palette)
 
+g.set(ylim=(50000, 400000))
 g.fig.suptitle('Relationship between Average Income and Average House Price per County in Ireland')
 
-plt.tight_layout()
+plt.tight_layout(pad=1.0)
 
 g.fig.savefig('Scatterplot of average income vs house price by county.png', bbox_inches='tight')
 
