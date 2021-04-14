@@ -207,7 +207,7 @@ g.fig.suptitle('Relationship between Average Income and Average House Price per 
 
 plt.tight_layout()
 
-g.fig.savefig('Scatterplot of average income vs house price by county.png')
+g.fig.savefig('Scatterplot of average income vs house price by county.png', bbox_inches='tight')
 
 #box plot showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
@@ -223,7 +223,7 @@ plt.xticks([0,1], ['Outside Dublin', 'Dublin'])
 
 plt.tight_layout()
 
-g.fig.savefig('Box plot of distribution of prices in Dublin vs outside Dublin.png')
+g.fig.savefig('Box plot of distribution of prices in Dublin vs outside Dublin.png',bbox_inches='tight')
 
 #count plot showing number of houses sold in Dublin vs outside Dublin
 g = sns.catplot(x='Dublin_Flag', data=five_yrs, kind='count')
@@ -234,7 +234,7 @@ plt.xticks([0,1], ['Outside Dublin', 'Dublin'])
 
 plt.tight_layout()
 
-g.fig.savefig('Count plot of number of houses sold in Dublin vs outside Dublin.png')
+g.fig.savefig('Count plot of number of houses sold in Dublin vs outside Dublin.png',bbox_inches='tight')
 
 
 
