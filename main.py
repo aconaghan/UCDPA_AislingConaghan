@@ -202,7 +202,20 @@ plt.tight_layout()
 
 #plt.show()
 
+#scatterplot showing avg income vs avg house price by county
+avg_income_house_price = df2.groupby('County')[['Price (€)','Avg Income per Person', 'Pop (000s)']].mean().reset_index()
+avg_income_house_price.columns = ["County", "Average House Price (€)", "Average Income per Person (€)", "Population (000s)"]
+print(avg_income_house_price)
 
+minsize = min(avg_income_house_price['Population (000s)'])
+maxsize = max(avg_income_house_price['Population (000s)'])
+
+sns.relplot(x='Average Income per Person (€)', y='Average House Price (€)', data=avg_income_house_price, kind='scatter',
+            size='Population (000s)', sizes=(minsize, maxsize), hue='Population (000s)')
+
+plt.tight_layout()
+
+plt.show()
 
 #histogram showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
