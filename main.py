@@ -162,7 +162,7 @@ ax.legend()
 
 fig.tight_layout()
 
-plt.show()
+fig.savefig('Bar Chart of Price by Region & Property Type.png')
 
 #time series graph of average price by region
 avg_price_by_year = df2.groupby(['Region','Year'])['Price (€)'].mean().reset_index()
@@ -200,7 +200,7 @@ plt.xticks(range(2010, 2020))
 
 plt.tight_layout()
 
-plt.show()
+fig.savefig('Average House Price by Region from 2010-2019.png')
 
 #scatterplot showing avg income vs avg house price by county
 avg_income_house_price = df2.groupby('County')[['Price (€)','Avg Income per Person', 'Pop (000s)']].mean().reset_index()
@@ -208,17 +208,18 @@ avg_income_house_price.columns = ["County", "Average House Price (€)", "Averag
 print(avg_income_house_price)
 
 sns.set_style('whitegrid')
+palette = sns.color_palette("flare", as_cmap=True)
 minsize = min(avg_income_house_price['Population (000s)'])
 maxsize = max(avg_income_house_price['Population (000s)'])
 
 g = sns.relplot(x='Average Income per Person (€)', y='Average House Price (€)', data=avg_income_house_price, kind='scatter',
-            size='Population (000s)', sizes=(minsize, maxsize), hue='Population (000s)')
+            size='Population (000s)', sizes=(minsize, maxsize), hue='Population (000s)', palette=palette)
 
 g.fig.suptitle('Relationship between Average Income and Average House Price per County in Ireland')
 
 plt.tight_layout()
 
-plt.show()
+g.fig.savefig('Scatterplot of average income vs house price by county.png')
 
 #box plot showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
@@ -234,7 +235,7 @@ plt.xticks([0,1], ['Outside Dublin', 'Dublin'])
 
 plt.tight_layout()
 
-plt.show()
+g.fig.savefig('Box plot of distribution of prices in Dublin vs outside Dublin.png')
 
 #count plot showing number of houses sold in Dublin vs outside Dublin
 g = sns.catplot(x='Dublin_Flag', data=five_yrs, kind='count')
@@ -245,7 +246,7 @@ plt.xticks([0,1], ['Outside Dublin', 'Dublin'])
 
 plt.tight_layout()
 
-plt.show()
+g.fig.savefig('Count plot of number of houses sold in Dublin vs outside Dublin.png')
 
 
 
