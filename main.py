@@ -79,15 +79,46 @@ for value in df_no_dup["Region"]:
 df_no_dup["Dublin_Flag"] = result
 
 #merging on pop density
-pop_data = pd.read_excel(r'pop_density.xlsx', skiprows=[0,1])
-print(pop_data.dtypes)
-cols = pop_data.select_dtypes(['object']).columns
-pop_data[cols] = pop_data[cols].apply(lambda x: x.str.strip())
+#pop_data = pd.read_excel(r'pop_density.xlsx', skiprows=[0,1])
+#print(pop_data.head())
+#cols = pop_data.select_dtypes(['object']).columns
+#pop_data[cols] = pop_data[cols].apply(lambda x: x.str.strip())
 
-df2 = df_no_dup.merge(pop_data, on='Region', how='left')
+#df2 = df_no_dup.merge(pop_data, on='Region', how='left')
+#print(df2.isnull().sum())
+#print(df2.shape)
+#print(df2.dtypes)
+
+#merging on population data
+pop_county = pd.read_excel(r'pop_by_county.xlsx', skiprows=[0,1])
+pop_county = pop_county.iloc[:,[0,2]]
+pop_county.columns = ['Region and County','Pop (000s)']
+pop_county = pop_county.dropna(axis=0)
+pop_county = pop_county.append({'Region and County' : 'Galway',
+                                'Pop (000s)' : 258.1} ,
+                                ignore_index=True)
+pop_county = pop_county.append({'Region and County' : 'Cork',
+                                'Pop (000s)' : 542.9} ,
+                                ignore_index=True)
+
+df2 = df_no_dup.merge(pop_county, left_on='County', right_on='Region and County', how='left')
+del df2['Region and County']
 print(df2.isnull().sum())
 print(df2.shape)
-print(df2.columns)
+print(df2.dtypes)
+
+#merging on income
+income = pd.read_excel(r'Income_by_Region.xlsx', skiprows=[0,2])
+income = income.iloc[:,[0,10]]
+income.columns = ['Unnamed: 0','Avg Income per Person']
+cols = income.select_dtypes(['object']).columns
+income[cols] = income[cols].apply(lambda x: x.str.strip())
+print(income.dtypes)
+df2 = df2.merge(income, how='left', left_on='County', right_on='Unnamed: 0')
+del df2['Unnamed: 0']
+print(df2.isnull().sum())
+print(df2.shape)
+
 
 #grouped summary statistics
 avg_price_per_county = df2.groupby('County')['Price (€)'].mean().sort_values(ascending=False)
@@ -109,7 +140,6 @@ pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean,
 #bar plot of average price by region and property type
 price_by_region_type = df2.groupby(['Region', 'Description of Property'])['Price (€)'].mean().reset_index()
 price_by_region_type = price_by_region_type.sort_values('Price (€)', ascending=False)
-print(price_by_region_type)
 new = price_by_region_type[price_by_region_type['Description of Property'] == 'New Dwelling house /Apartment'].reset_index()
 second_hand = price_by_region_type[price_by_region_type['Description of Property'] == 'Second-Hand Dwelling house /Apartment'].reset_index()
 region_list = price_by_region_type['Region'].unique()
@@ -132,7 +162,7 @@ ax.legend()
 
 fig.tight_layout()
 
-plt.show()
+#plt.show()
 
 #time series graph of average price by region
 avg_price_by_year = df2.groupby(['Region','Year'])['Price (€)'].mean().reset_index()
@@ -170,7 +200,9 @@ plt.xticks(range(2010, 2020))
 
 plt.tight_layout()
 
-plt.show()
+#plt.show()
+
+
 
 #histogram showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
@@ -185,7 +217,7 @@ fig,ax = plt.subplots()
 ax.hist(dub_five_yrs['Price (€)'], label='Dublin', histtype='step')
 ax.hist(not_dub_five_yrs['Price (€)'], label='Outside Dublin', histtype='step')
 ax.legend()
-plt.show()
+#plt.show()
 
 
 
