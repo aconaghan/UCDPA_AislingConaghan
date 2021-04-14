@@ -155,14 +155,14 @@ rects2 = ax.bar(x + width/2, second_hand['Price (€)'], width, label='Second-Ha
 # Add some text for labels, title and custom x-axis tick labels, etc.
 ax.set_ylabel('Average Price (€)')
 ax.set_xlabel('Region')
-ax.set_title('Average Price by House Type in Ireland')
+ax.set_title('Average Price by Region and House Type in Ireland')
 ax.set_xticks(x)
 ax.set_xticklabels(region_list, rotation=45)
 ax.legend()
 
 fig.tight_layout()
 
-#plt.show()
+plt.show()
 
 #time series graph of average price by region
 avg_price_by_year = df2.groupby(['Region','Year'])['Price (€)'].mean().reset_index()
@@ -195,23 +195,26 @@ plot_timeseries(ax, sw.index, sw['Price (€)'], "o", "tab:pink", "South-West", 
 plot_timeseries(ax, midland.index, midland['Price (€)'], "o", "tab:cyan", "Midland", "Year", "Average House Price (€)")
 plot_timeseries(ax, west.index, west['Price (€)'], "o", "tab:olive", "West", "Year", "Average House Price (€)")
 
-ax.set_title("Average House Price by Region from 2010-2019")
+ax.set_title("Average House Price by Region in Ireland from 2010-2019")
 plt.xticks(range(2010, 2020))
 
 plt.tight_layout()
 
-#plt.show()
+plt.show()
 
 #scatterplot showing avg income vs avg house price by county
 avg_income_house_price = df2.groupby('County')[['Price (€)','Avg Income per Person', 'Pop (000s)']].mean().reset_index()
 avg_income_house_price.columns = ["County", "Average House Price (€)", "Average Income per Person (€)", "Population (000s)"]
 print(avg_income_house_price)
 
+sns.set_style('whitegrid')
 minsize = min(avg_income_house_price['Population (000s)'])
 maxsize = max(avg_income_house_price['Population (000s)'])
 
-sns.relplot(x='Average Income per Person (€)', y='Average House Price (€)', data=avg_income_house_price, kind='scatter',
+g = sns.relplot(x='Average Income per Person (€)', y='Average House Price (€)', data=avg_income_house_price, kind='scatter',
             size='Population (000s)', sizes=(minsize, maxsize), hue='Population (000s)')
+
+g.fig.suptitle('Relationship between Average Income and Average House Price per County in Ireland')
 
 plt.tight_layout()
 
@@ -220,12 +223,27 @@ plt.show()
 #box plot showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
 
-sns.catplot(x='Dublin_Flag', y='Price (€)', data=five_yrs, kind='box', sym="")
+sns.set_style('darkgrid')
+sns.set_palette(['#39A7D0', '#36ADA4'])
+
+g = sns.catplot(x='Dublin_Flag', y='Price (€)', data=five_yrs, kind='box', sym="")
+
+g.fig.suptitle('Distribution of House Prices in Dublin Versus All Other Counties in Ireland from 2014-2019')
+g.set(xlabel=None, ylabel='House Prices (€)')
+plt.xticks([0,1], ['Outside Dublin', 'Dublin'])
+
+plt.tight_layout()
 
 plt.show()
 
 #count plot showing number of houses sold in Dublin vs outside Dublin
-sns.catplot(x='Dublin_Flag', data=five_yrs, kind='count')
+g = sns.catplot(x='Dublin_Flag', data=five_yrs, kind='count')
+
+g.fig.suptitle('Number of Houses Sold in Dublin Versus All Other Counties in Ireland from 2014-2019')
+g.set(xlabel=None, ylabel='Number of Houses Sold')
+plt.xticks([0,1], ['Outside Dublin', 'Dublin'])
+
+plt.tight_layout()
 
 plt.show()
 
