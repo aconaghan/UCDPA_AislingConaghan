@@ -217,20 +217,18 @@ plt.tight_layout()
 
 plt.show()
 
-#histogram showing the distribution of prices in Dublin vs outside Dublin
+#box plot showing the distribution of prices in Dublin vs outside Dublin
 five_yrs = df2[df2['Year'] >= 2014]
-five_yrs.set_index('Dublin_Flag')
-print(five_yrs)
 
-dub_five_yrs = five_yrs[five_yrs['Dublin_Flag'] == 1]
-print(dub_five_yrs)
-not_dub_five_yrs = five_yrs[five_yrs['Dublin_Flag'] == 0]
+sns.catplot(x='Dublin_Flag', y='Price (€)', data=five_yrs, kind='box', sym="")
 
-fig,ax = plt.subplots()
-ax.hist(dub_five_yrs['Price (€)'], label='Dublin', histtype='step')
-ax.hist(not_dub_five_yrs['Price (€)'], label='Outside Dublin', histtype='step')
-ax.legend()
-#plt.show()
+plt.show()
+
+#count plot showing number of houses sold in Dublin vs outside Dublin
+sns.catplot(x='Dublin_Flag', data=five_yrs, kind='count')
+
+plt.show()
+
 
 
 
