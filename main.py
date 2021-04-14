@@ -78,17 +78,6 @@ for value in df_no_dup["Region"]:
 
 df_no_dup["Dublin_Flag"] = result
 
-#merging on pop density
-#pop_data = pd.read_excel(r'pop_density.xlsx', skiprows=[0,1])
-#print(pop_data.head())
-#cols = pop_data.select_dtypes(['object']).columns
-#pop_data[cols] = pop_data[cols].apply(lambda x: x.str.strip())
-
-#df2 = df_no_dup.merge(pop_data, on='Region', how='left')
-#print(df2.isnull().sum())
-#print(df2.shape)
-#print(df2.dtypes)
-
 #merging on population data
 pop_county = pd.read_excel(r'pop_by_county.xlsx', skiprows=[0,1])
 pop_county = pop_county.iloc[:,[0,2]]
