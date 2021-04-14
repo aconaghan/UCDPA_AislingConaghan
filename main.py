@@ -108,7 +108,6 @@ del df2['Unnamed: 0']
 print(df2.isnull().sum())
 print(df2.shape)
 
-
 #grouped summary statistics
 avg_price_per_county = df2.groupby('County')['Price (€)'].mean().sort_values(ascending=False)
 print(avg_price_per_county)
