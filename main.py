@@ -34,7 +34,8 @@ df_no_dup = df_no_dup.fillna(0)
 
 #count of irish entries in 'Description of Property'
 print(df_no_dup['Description of Property'].value_counts())
-df_no_dup = df_no_dup[df_no_dup['Description of Property'].isin(['Second-Hand Dwelling house /Apartment', 'New Dwelling house /Apartment'])]
+df_no_dup = df_no_dup[df_no_dup['Description of Property'].isin(
+            ['Second-Hand Dwelling house /Apartment', 'New Dwelling house /Apartment'])]
 print(df_no_dup.shape)
 
 #dictionary for mapping county to region
@@ -93,8 +94,6 @@ pop_county = pop_county.append({'Region and County' : 'Cork',
 df2 = df_no_dup.merge(pop_county, left_on='County', right_on='Region and County', how='left')
 del df2['Region and County']
 print(df2.isnull().sum())
-print(df2.shape)
-print(df2.dtypes)
 
 #merging on income
 income = pd.read_excel(r'Income_by_Region.xlsx', skiprows=[0,2])
@@ -108,10 +107,6 @@ del df2['Unnamed: 0']
 print(df2.isnull().sum())
 print(df2.shape)
 
-#grouped summary statistics
-avg_price_per_county = df2.groupby('County')['Price (€)'].mean().sort_values(ascending=False)
-print(avg_price_per_county)
-
 def pivot_to_csv(data, values, index, aggfunc, output_file):
 
     # Create pivot table of summary statistics
@@ -121,9 +116,11 @@ def pivot_to_csv(data, values, index, aggfunc, output_file):
     filename = str(output_file) + '.csv'
     table.to_csv(filename)
 
-pivot_to_csv(df2, 'Price (€)',  ['Region','County'], [np.mean, np.median, np.min, np.max], 'SummStats_Region_County')
+pivot_to_csv(df2, 'Price (€)',  ['Region','County'], [np.mean, np.median, np.min, np.max],
+             'SummStats_Region_County')
 
-pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean, 'Avg_Price_Region_TypeProperty')
+pivot_to_csv(df2, 'Price (€)',  ['Region','Description of Property'], np.mean,
+             'Avg_Price_Region_TypeProperty')
 
 #bar plot of average price by region and property type
 price_by_region_type = df2.groupby(['Region', 'Description of Property'])['Price (€)'].mean().reset_index()
@@ -203,7 +200,7 @@ maxsize = max(avg_income_house_price['Population (000s)'])
 g = sns.relplot(x='Average Income per Person (€)', y='Average House Price (€)', data=avg_income_house_price, kind='scatter',
             size='Population (000s)', sizes=(minsize, maxsize), hue='Population (000s)', palette=palette)
 
-g.set(ylim=(50000, 400000))
+g.set(ylim=(None, 400000))
 g.fig.suptitle('Relationship between Average Income and Average House Price per County in Ireland')
 
 plt.tight_layout(pad=1.0)
