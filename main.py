@@ -127,7 +127,7 @@ price_by_region_type = df2.groupby(['Region', 'Description of Property'])['Price
 price_by_region_type = price_by_region_type.sort_values('Price (€)', ascending=False)
 new = price_by_region_type[price_by_region_type['Description of Property'] == 'New Dwelling house /Apartment'].reset_index()
 second_hand = price_by_region_type[price_by_region_type['Description of Property'] == 'Second-Hand Dwelling house /Apartment'].reset_index()
-region_list = price_by_region_type['Region'].unique()
+region_list = second_hand['Region'].unique()
 print(region_list)
 
 x = np.arange(len(region_list))  # the label locations
