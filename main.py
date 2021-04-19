@@ -234,6 +234,9 @@ plt.tight_layout()
 
 g.fig.savefig('Count plot of number of houses sold in Dublin vs outside Dublin.png',bbox_inches='tight')
 
+pivot_to_csv(df2, ['Price (€)', 'Avg Income per Person', 'Pop (000s)'], ['County'], [np.mean],
+             'Bubble_Chart')
+
 
 
 
